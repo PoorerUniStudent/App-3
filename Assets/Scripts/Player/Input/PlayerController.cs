@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private int speed;
+    [SerializeField] private Animator anim;
+    [SerializeField] private SpriteRenderer playerSprite;
 
     private PlayerControls playerControls;
-    // Start is called before the first frame update
+    private Rigidbody rb;
+    private Vector3 movement;
+
+    private const string IS_WALK_PARAM = "isWalk";
+
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -17,9 +24,28 @@ public class PlayerController : MonoBehaviour
         playerControls.Enable();
     }
 
+    private void Start()
+    {
+        rb = gameObject.GetComponent<Rigidbody>();
+    }
+
     private void Update()
     {
         float x = playerControls.Player.Move.ReadValue<Vector2>().x;
         float z = playerControls.Player.Move.ReadValue<Vector2>().y;
+
+        movement = new Vector3(x, 0, z).normalized;
+
+        anim.SetBool(IS_WALK_PARAM, movement != Vector3.zero);
+
+        if (x!= 0 && x < 0)
+        {
+            playerSprite.flipX = false;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(transform.position + movement * speed * Time.fixedDeltaTime);
     }
 }
