@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,17 +10,29 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int jumpPower;
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] private LayerMask grassLayer;
+    [SerializeField] private int stepsInGrass;
+    [SerializeField] private int minStepsToEncounter;
+    [SerializeField] private int maxStepsToEncounter;
     [SerializeField] private Transform groundCheck;
 
     private PlayerControls playerControls;
     private Rigidbody rb;
     private Vector3 movement;
 
+    private bool movingInGrass;
+    private float stepTimer;
+    private int stepToEncounter;
+
     private const string IS_WALK_PARAM = "run";
     private const string IS_IDLE_PARAM = "idle";
     private const string IS_JUMPING_PARAM = "jump";
     private const string IS_IN_AIR_PARAM = "inAir";
     private const string IS_LANDING_PARAM = "landing";
+
+    private const float TIME_PER_STEP = 0.5f;
+
+    private const string BATTLE_SCENE = "BattleScene";
 
     private string currentState = IS_IDLE_PARAM;
 
@@ -32,10 +45,11 @@ public class PlayerController : MonoBehaviour
     private bool coyoteTime = false;
     private float coyoteTimeDuration = 0.2f; // in seconds
     private float coyoteTimeStart;
-
+    #region Unity Functions
     private void Awake()
     {
         playerControls = new PlayerControls();
+        CalculateStepsToEncounter();
     }
 
     private void OnEnable()
@@ -116,8 +130,36 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(transform.position + movement * speed * Time.fixedDeltaTime);
-    }
 
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1, grassLayer);
+        movingInGrass = colliders.Length > 0 && movement != Vector3.zero;
+
+        if (movingInGrass)
+        {
+            stepTimer += Time.fixedDeltaTime;
+
+            if (stepTimer > TIME_PER_STEP)
+            {
+                stepsInGrass += 1;
+                stepTimer = 0;
+
+                if (stepsInGrass >= maxStepsToEncounter)
+                {
+                    SceneManager.LoadScene(BATTLE_SCENE);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Encounter Functions
+    private void CalculateStepsToEncounter()
+    {
+        stepToEncounter = Random.Range(minStepsToEncounter, maxStepsToEncounter);
+    }
+    #endregion
+
+    #region Ground Check
     private void CheckIfGrounded()
     {
         if (groundCheck == null) return;
@@ -132,23 +174,6 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = false;
         }
-    }
-
-    private void CheckCoyoteTime()
-    {
-        if (Time.time >= coyoteTimeStart + coyoteTimeDuration)
-        {
-            coyoteTime = false;
-        }
-    }
-
-    // For debugging
-    private void OnDrawGizmos()
-    {
-        if (groundCheck == null) return;
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(groundCheck.transform.position, groundCheckRadius);
     }
 
     private void CheckGroundStates()
@@ -170,7 +195,16 @@ public class PlayerController : MonoBehaviour
             anim.SetBool(IS_IDLE_PARAM, false);
         }
     }
+    #endregion
 
+    #region In Air
+    private void CheckCoyoteTime()
+    {
+        if (Time.time >= coyoteTimeStart + coyoteTimeDuration)
+        {
+            coyoteTime = false;
+        }
+    }
     private void AddForceY(int force)
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -189,6 +223,17 @@ public class PlayerController : MonoBehaviour
     {
         AddForceY(jumpPower);
     }
+    #endregion
+    // For debugging
+    private void OnDrawGizmos()
+    {
+        if (groundCheck == null) return;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(groundCheck.transform.position, groundCheckRadius);
+    }
+
+    
 }
 
 
