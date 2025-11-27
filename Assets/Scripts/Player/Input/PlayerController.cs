@@ -188,13 +188,6 @@ public class PlayerController : MonoBehaviour
     public void JumpTrigger()
     {
         AddForceY(jumpPower);
-        currentState = IS_IN_AIR_PARAM;
-        anim.SetFloat("yVelocity", rb.velocity.y);
-        anim.SetBool(IS_IN_AIR_PARAM, true);
-
-        anim.SetBool(IS_IDLE_PARAM, false);
-        anim.SetBool(IS_WALK_PARAM, false);
-        anim.SetBool(IS_JUMPING_PARAM, false);
     }
 }
 
