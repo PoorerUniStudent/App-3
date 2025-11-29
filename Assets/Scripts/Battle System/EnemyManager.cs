@@ -11,7 +11,7 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
-        GenerateEnemyByName("Blue Slime", 10);
+        GenerateEnemyByName("Blue Slime", 1);
     }
 
     private void GenerateEnemyByName(string enemyName, int level)
