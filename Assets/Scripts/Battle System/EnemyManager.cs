@@ -11,7 +11,7 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
-        GenerateEnemyByName("Blue Slime", 1);
+        GenerateEnemyByName("Blue Slime", 99);
     }
 
     private void GenerateEnemyByName(string enemyName, int level)
@@ -35,6 +35,11 @@ public class EnemyManager : MonoBehaviour
                 currentEnemies.Add(newEnemy);
             }
         }
+    }
+
+    public List<Enemy> GetCurrentEnemies()
+    {
+        return currentEnemies;
     }
 }
 

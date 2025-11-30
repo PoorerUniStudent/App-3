@@ -28,7 +28,6 @@ public class BattleVisuals : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        SetStartingValues(10, 10, 5);
         PlayAttackAnimation();
     }
 
@@ -39,6 +38,7 @@ public class BattleVisuals : MonoBehaviour
         this.level = level;
 
         levelText.text = LVL_ABBR + this.level.ToString();
+        UpdateHealthBar();
     }
 
     public void ChangeHealth(int currentHealth)
