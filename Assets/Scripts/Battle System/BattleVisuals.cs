@@ -25,10 +25,9 @@ public class BattleVisuals : MonoBehaviour
     private const string IS_SHOOT_PARAM = "isShoot";
     private const string IS_ATTACK_RELEASE_PARAM = "isAttackRelease";
 
-    void Start()
+    void Awake()
     {
         anim = GetComponent<Animator>();
-        PlayAttackAnimation();
     }
 
     public void SetStartingValues(int currentHealth, int maxHealth, int level)
