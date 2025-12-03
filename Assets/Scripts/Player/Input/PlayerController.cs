@@ -72,9 +72,10 @@ public class PlayerController : MonoBehaviour
         CheckCoyoteTime();
 
         movement = new Vector3(x, 0, z).normalized;
-
+        Debug.Log(jump);
         if (jump && numOfJumps > 0 && (isGrounded || coyoteTime)) 
         {
+            Debug.Log("Jumped");
             numOfJumps -= 1;
             coyoteTime = false;
             currentState = IS_JUMPING_PARAM;
