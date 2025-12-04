@@ -59,7 +59,7 @@ public class BattleSystem : MonoBehaviour
 
         for (int i = 0; i < allBattlers.Count; i++)
         {
-            if (state != BattleState.Battle)
+            if (state != BattleState.Battle || allBattlers[i].CurrentHealth <= 0)
             {
                 continue;
             }
@@ -79,6 +79,8 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
+        RemoveDeadBattlers();
+
         if (state == BattleState.Battle)
         {
             bottomTextPopup.SetActive(false);
@@ -96,7 +98,7 @@ public class BattleSystem : MonoBehaviour
         {
             // attack selected enemy (attack action)
             BattleEntities currentAttacker = allBattlers[i];
-            if (allBattlers[currentAttacker.Target].IsPlayer || currentAttacker.Target >= allBattlers.Count)
+            if (allBattlers[currentAttacker.Target].CurrentHealth <= 0)
             {
                 currentAttacker.SetTarget(GetRandomEnemy());
             }
@@ -113,7 +115,6 @@ public class BattleSystem : MonoBehaviour
                 yield return new WaitForSeconds(TURN_DURATION);
 
                 enemyBattlers.Remove(currentTarget);
-                allBattlers.Remove(currentTarget);
 
                 if (enemyBattlers.Count <= 0)
                 {
@@ -144,7 +145,6 @@ public class BattleSystem : MonoBehaviour
                 yield return new WaitForSeconds(TURN_DURATION);
 
                 playerBattlers.Remove(currentTarget);
-                allBattlers.Remove(currentTarget);
 
                 // if no part members remain, we lost
                 if (playerBattlers.Count <= 0)
@@ -176,6 +176,17 @@ public class BattleSystem : MonoBehaviour
             {
                 bottomText.text = RUN_FAIL_MESSAGE;
                 yield return new WaitForSeconds(TURN_DURATION);
+            }
+        }
+    }
+
+    private void RemoveDeadBattlers()
+    {
+        for (int i = 0; i < allBattlers.Count; i++)
+        {
+            if (allBattlers[i].CurrentHealth <= 0)
+            {
+                allBattlers.RemoveAt(i);
             }
         }
     }
