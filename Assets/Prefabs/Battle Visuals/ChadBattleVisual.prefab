@@ -415,9 +415,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Fox
-
-'
+  m_text: Chad
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -690,7 +688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5130501789911400892}
   - component: {fileID: 6574823858618329339}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fox_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1052,7 +1050,7 @@ GameObject:
   - component: {fileID: 5046698187863287012}
   - component: {fileID: 4750905989489603813}
   - component: {fileID: 8431611370971711070}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ChadBattleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
