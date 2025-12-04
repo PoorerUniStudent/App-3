@@ -19,3 +19,10 @@ MonoBehaviour:
   BaseSpeed: 5
   MemberBattleVisualPrefab: {fileID: 7514317235867061558, guid: 77c18093dc7bd464582bedf40c70840e, type: 3}
   MemberOverworldVisualPrefab: {fileID: 0}
+  Attacks:
+  - AttackName: Slash
+    AnimName: isAttacking
+    AttackMult: 1
+  - AttackName: Shoot
+    AnimName: 
+    AttackMult: 1

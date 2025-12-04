@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxStepsToEncounter;
     [SerializeField] private Transform groundCheck;
 
-    private PlayerControls playerControls;
+    public PlayerControls playerControls { get; private set; }
     private Rigidbody rb;
     private Vector3 movement;
     private PartyManager partyManager;
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
         CheckCoyoteTime();
 
         movement = new Vector3(x, 0, z).normalized;
-        Debug.Log(jump);
+  
         if (jump && numOfJumps > 0 && (isGrounded || coyoteTime)) 
         {
             Debug.Log("Jumped");

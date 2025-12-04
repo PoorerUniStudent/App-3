@@ -9,6 +9,7 @@ public class EnemyInfo : ScriptableObject
     public int BaseHealth;
     public int BaseStr;
     public int BaseSpeed;
+    public int BaseExpGive;
 
     public GameObject EnemyVisualPrefab; // Used in battle scene
 }

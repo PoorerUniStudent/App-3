@@ -21,11 +21,14 @@ public class BattleSystem : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject[] enemySelectionButtons;
+    [SerializeField] private GameObject[] attackSelectionButtons;
     [SerializeField] private GameObject battleMenu;
     [SerializeField] private GameObject enemySelectionMenu;
+    [SerializeField] private GameObject attackSelectionMenu;
     [SerializeField] private TextMeshProUGUI actionText;
     [SerializeField] private GameObject bottomTextPopup;
     [SerializeField] private TextMeshProUGUI bottomText;
+    [SerializeField] private ChargeBar chargeBar;
 
     private PartyManager partyManager;
     private EnemyManager enemyManager;
@@ -33,12 +36,14 @@ public class BattleSystem : MonoBehaviour
 
     private const string ACTION_MESSAGE = "'s Action:";
     private const string WIN_MESSAGE = "You have won the battle!";
-    private const string LOSE_MESSAGE = "Your party has been slain";
+    private const string LOSE_MESSAGE = "Your party has been slain...";
     private const string RUN_MESSAGE = "You successfully ran away!";
     private const string RUN_FAIL_MESSAGE = "You failed to run away!";
     private const int TURN_DURATION = 2;
     private const int RUN_CHANCE = 60;
     private const string OVERWORLD_SCENE = "OverworldScene";
+
+    private Vector3 RESPAWN_POS = new Vector3(0, 1, 9);
 
     void Start()
     {
@@ -96,7 +101,22 @@ public class BattleSystem : MonoBehaviour
         // player's turn
         if (allBattlers[i].IsPlayer)
         {
-            // attack selected enemy (attack action)
+            chargeBar.gameObject.SetActive(true);
+            chargeBar.SetCurrentlyAttackingMember(i);
+            if (allBattlers[i].CurrentAttack.AnimName != "")
+            {
+                allBattlers[i].BattleVisuals.PlayAttackAnimation();
+            }
+
+            allBattlers[i].DoneTurn = false;
+            while (!allBattlers[i].DoneTurn)
+            {
+                
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            // attack selected enemy(attack action)
+            chargeBar.gameObject.SetActive(false);
             BattleEntities currentAttacker = allBattlers[i];
             if (allBattlers[currentAttacker.Target].CurrentHealth <= 0)
             {
@@ -113,6 +133,26 @@ public class BattleSystem : MonoBehaviour
                 bottomText.text = string.Format("{0} defeated {1}!", currentAttacker.Name, currentTarget.Name);
                 // wait some seconds
                 yield return new WaitForSeconds(TURN_DURATION);
+
+                if (currentAttacker.IsPlayer)
+                {
+                    int oldLevel = partyManager.GetLevelByID(currentAttacker.ID);
+                    partyManager.AddExpByID(currentAttacker.ID, currentTarget.ExpGive);
+                    int newLevel = partyManager.GetLevelByID(currentAttacker.ID);
+                    bottomText.text = string.Format("{0} gained {1} experience!", currentAttacker.Name, currentTarget.ExpGive);
+                    // wait some seconds
+                    yield return new WaitForSeconds(TURN_DURATION / 2);
+
+                    if (oldLevel < newLevel)
+                    {
+                        currentAttacker.Level = newLevel;
+                        currentAttacker.UpdateUI();
+                        bottomText.text = string.Format("{0} is now level {1}!", currentAttacker.Name, newLevel);
+                        DetermineBattleOrder();
+                        // wait some seconds
+                        yield return new WaitForSeconds(TURN_DURATION / 2);
+                    }
+                }
 
                 enemyBattlers.Remove(currentTarget);
 
@@ -152,7 +192,9 @@ public class BattleSystem : MonoBehaviour
                     state = BattleState.Lost;
                     bottomText.text = LOSE_MESSAGE;
                     yield return new WaitForSeconds(TURN_DURATION);
-                    Debug.Log("Game over...");
+                    partyManager.SetPosition(RESPAWN_POS);
+                    partyManager.ResetPartyMembers();
+                    SceneManager.LoadScene(OVERWORLD_SCENE);
                 }
             }
         }
@@ -180,6 +222,11 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void SetTurnDoneByIndex(int i)
+    {
+        allBattlers[i].DoneTurn = true;
+    }
+
     private void RemoveDeadBattlers()
     {
         for (int i = 0; i < allBattlers.Count; i++)
@@ -204,6 +251,8 @@ public class BattleSystem : MonoBehaviour
 
             tempEntity.SetEntityValues(currentParty[i].MemberName, currentParty[i].CurrentHealth, 
             currentParty[i].MaxHealth, currentParty[i].Speed, currentParty[i].Strength, currentParty[i].Level, true);
+            tempEntity.SetID(currentParty[i].ID);
+            tempEntity.Attacks = currentParty[i].Attacks;
 
             BattleVisuals tempBattleVisuals = Instantiate(currentParty[i].MemberBattleVisualPrefab, 
             partySpawnPoints[i].position, Quaternion.identity).GetComponent<BattleVisuals>();
@@ -226,6 +275,7 @@ public class BattleSystem : MonoBehaviour
 
             tempEntity.SetEntityValues(currentEnemies[i].EnemyName, currentEnemies[i].CurrentHealth,
             currentEnemies[i].MaxHealth, currentEnemies[i].Speed, currentEnemies[i].Strength, currentEnemies[i].Level, false);
+            tempEntity.ExpGive = currentEnemies[i].ExpGive;
 
             BattleVisuals tempBattleVisuals = Instantiate(currentEnemies[i].EnemyVisualPrefab,
             enemySpawnPoints[i].position, Quaternion.identity).GetComponent<BattleVisuals>();
@@ -245,9 +295,16 @@ public class BattleSystem : MonoBehaviour
 
     public void ShowEnemySelectionMenu()
     {
-        battleMenu.SetActive(false);
+        attackSelectionMenu.SetActive(false);
         enemySelectionMenu.SetActive(true);
         SetEnemySelectionButtons();
+    }
+
+    public void ShowAttackSelectionMenu()
+    {
+        battleMenu.SetActive(false);
+        attackSelectionMenu.SetActive(true);
+        SetAttackSelectionButtons();
     }
 
     private void SetEnemySelectionButtons()
@@ -262,6 +319,22 @@ public class BattleSystem : MonoBehaviour
             {
                 enemySelectionButtons[i].SetActive(true);
                 enemySelectionButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = enemyBattlers[i].Name;
+            }
+        }
+    }
+
+    private void SetAttackSelectionButtons()
+    {
+        for (int i = 0; i < attackSelectionButtons.Length; i++)
+        {
+            if (i >= attackSelectionButtons.Length)
+            {
+                attackSelectionButtons[i].SetActive(false);
+            }
+            else
+            {
+                attackSelectionButtons[i].SetActive(true);
+                attackSelectionButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = playerBattlers[currentPlayer].Attacks[i].AttackName; // attack name
             }
         }
     }
@@ -285,10 +358,35 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void SelectAttack(int attackIndex)
+    {
+        playerBattlers[currentPlayer].CurrentAttack = playerBattlers[currentPlayer].Attacks[attackIndex];
+
+        ShowEnemySelectionMenu();
+    }
+
     private void AttackAction(BattleEntities currentAttacker, BattleEntities currentTarget)
     {
         int damage = currentAttacker.Strength;
-        currentAttacker.BattleVisuals.PlayAttackAnimation();
+        if (currentAttacker.IsPlayer)
+        {
+            damage = (int)(damage * chargeBar.damageMod * currentAttacker.CurrentAttack.AttackMult);
+            if (currentAttacker.CurrentAttack.AttackName == "Shoot")
+            {
+                currentAttacker.BattleVisuals.PlayShootAnimation();
+            }
+            else
+            {
+                currentAttacker.BattleVisuals.PlayAttackReleaseAnimation();
+            }
+        }
+        else
+        {
+            currentAttacker.BattleVisuals.PlayAttackAnimation();
+        }
+
+        damage = Mathf.Clamp(damage, 1, 999);
+        
         currentTarget.CurrentHealth -= damage;
         currentTarget.BattleVisuals.PlayHitAnimation();
         currentTarget.UpdateUI();
@@ -379,10 +477,16 @@ public class BattleEntities
     public int Speed;
     public int Strength;
     public int Level;
+    public int ID;
+    public int ExpGive; // only for enemies
+    public MemberAttack[] Attacks;
+    public MemberAttack CurrentAttack;
     public bool IsPlayer;
     public int Target;
 
     public BattleVisuals BattleVisuals;
+
+    public bool DoneTurn; // Only for players
 
     public void SetEntityValues(string name, int currentHealth, int maxHealth, int speed, int strength, int level, bool isPlayer)
     {
@@ -403,5 +507,17 @@ public class BattleEntities
     public void UpdateUI()
     {
         BattleVisuals.ChangeHealth(CurrentHealth);
+        BattleVisuals.ChangeLevel(Level);
+    }
+
+    // For players only
+    public void SetID(int id)
+    {
+        ID = id;
+    }
+
+    public void SetExpGive(int expGive)
+    {
+        ExpGive = expGive;
     }
 }
