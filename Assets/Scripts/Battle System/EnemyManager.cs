@@ -7,11 +7,22 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private EnemyInfo[] enemies;
     [SerializeField] private List<Enemy> currentEnemies;
 
+    private static GameObject instance;
+
     private const float LEVEL_MOD = 0.5f;
 
     private void Awake()
     {
-        GenerateEnemyByName("Blue Slime", 1);
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = gameObject;
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void GenerateEnemyByName(string enemyName, int level)
@@ -40,6 +51,19 @@ public class EnemyManager : MonoBehaviour
     public List<Enemy> GetCurrentEnemies()
     {
         return currentEnemies;
+    }
+
+    public void GenerateEnemiesByEncounter(Encounter[] encounters, int maxNumEnemies)
+    {
+        currentEnemies.Clear();
+        int numEnemies = Random.Range(1, maxNumEnemies + 1);
+
+        for (int i = 0; i < numEnemies; i++)
+        {
+            Encounter tempEncounter = encounters[Random.Range(0, encounters.Length)];
+            int level = Random.Range(tempEncounter.LevelMin, tempEncounter.LevelMax + 1);
+            GenerateEnemyByName(tempEncounter.Enemy.EnemyName, level);
+        }
     }
 }
 

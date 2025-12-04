@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private PlayerControls playerControls;
     private Rigidbody rb;
     private Vector3 movement;
+    private PartyManager partyManager;
 
     private bool movingInGrass;
     private float stepTimer;
@@ -60,6 +61,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        partyManager = FindFirstObjectByType<PartyManager>();
+
+        if (partyManager.GetPosition() != Vector3.zero)
+        {
+            transform.position = partyManager.GetPosition();
+        }
     }
 
     private void Update()
@@ -146,6 +153,7 @@ public class PlayerController : MonoBehaviour
 
                 if (stepsInGrass >= maxStepsToEncounter)
                 {
+                    partyManager.SetPosition(transform.position);
                     SceneManager.LoadScene(BATTLE_SCENE);
                 }
             }
