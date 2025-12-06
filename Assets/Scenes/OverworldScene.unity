@@ -234,20 +234,49 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 64532235a2a968149a703318306aa8ff, type: 3}
       propertyPath: m_Name
-      value: Untitled
+      value: House
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -8700617353114198275, guid: 64532235a2a968149a703318306aa8ff, type: 3}
     - {fileID: 65702495048144492, guid: 64532235a2a968149a703318306aa8ff, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 64532235a2a968149a703318306aa8ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 49413102}
   m_SourcePrefab: {fileID: 100100000, guid: 64532235a2a968149a703318306aa8ff, type: 3}
 --- !u!4 &49413100 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 64532235a2a968149a703318306aa8ff, type: 3}
   m_PrefabInstance: {fileID: 49413099}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &49413101 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 64532235a2a968149a703318306aa8ff, type: 3}
+  m_PrefabInstance: {fileID: 49413099}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &49413102
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49413101}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8.263214, y: 4.7223673, z: 6.9002266}
+  m_Center: {x: -0.88773346, y: 2.4080162, z: 7.0750694}
 --- !u!1 &72313346
 GameObject:
   m_ObjectHideFlags: 0
