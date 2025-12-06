@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MemberName: Babbin
   StartingLevel: 1
-  BaseHealth: 7
+  BaseHealth: 13
   BaseStr: 6
   BaseSpeed: 8
   MemberBattleVisualPrefab: {fileID: 7514317235867061558, guid: 2b6a20aa2e86c8e48ad80a82ddf23402, type: 3}
   MemberOverworldVisualPrefab: {fileID: 952614967382397699, guid: c8ad3c9da01fde44f880a90c3f8cc528, type: 3}
+  Attacks:
+  - AttackName: Shoot
+    AnimName: IsAttack
+    AttackMult: 1

@@ -101,15 +101,23 @@ public class BattleSystem : MonoBehaviour
         // player's turn
         if (allBattlers[i].IsPlayer)
         {
+            BattleEntities currentAttacker = allBattlers[i];
+            if (allBattlers[currentAttacker.Target].CurrentHealth <= 0)
+            {
+                currentAttacker.SetTarget(GetRandomEnemy());
+            }
+            BattleEntities currentTarget = allBattlers[currentAttacker.Target];
+
             chargeBar.gameObject.SetActive(true);
             chargeBar.SetCurrentlyAttackingMember(i);
-            if (allBattlers[i].CurrentAttack.AttackName == "Slash")
+            if (currentAttacker.CurrentAttack.AttackName == "Slash")
             {
-                allBattlers[i].BattleVisuals.PlayAttackAnimation();
+                currentAttacker.BattleVisuals.PlayAttackAnimation();
             }
 
-            allBattlers[i].DoneTurn = false;
-            while (!allBattlers[i].DoneTurn)
+            bottomText.text = string.Format("Hold down [J] and release at the right time!");
+            currentAttacker.DoneTurn = false;
+            while (!currentAttacker.DoneTurn)
             {
                 
                 yield return new WaitForSeconds(0.1f);
@@ -117,12 +125,6 @@ public class BattleSystem : MonoBehaviour
 
             // attack selected enemy(attack action)
             chargeBar.gameObject.SetActive(false);
-            BattleEntities currentAttacker = allBattlers[i];
-            if (allBattlers[currentAttacker.Target].CurrentHealth <= 0)
-            {
-                currentAttacker.SetTarget(GetRandomEnemy());
-            }
-            BattleEntities currentTarget = allBattlers[currentAttacker.Target];
             AttackAction(currentAttacker, currentTarget);
             // wait some seconds
             yield return new WaitForSeconds(TURN_DURATION);
@@ -134,29 +136,7 @@ public class BattleSystem : MonoBehaviour
                 // wait some seconds
                 yield return new WaitForSeconds(TURN_DURATION);
 
-                if (currentAttacker.IsPlayer)
-                {
-                    int oldLevel = partyManager.GetLevelByID(currentAttacker.ID);
-                    partyManager.AddExpByID(currentAttacker.ID, currentTarget.ExpGive);
-                    int newLevel = partyManager.GetLevelByID(currentAttacker.ID);
-                    bottomText.text = string.Format("{0} gained {1} experience!", currentAttacker.Name, currentTarget.ExpGive);
-                    // wait some seconds
-                    yield return new WaitForSeconds(TURN_DURATION / 2);
-
-                    if (oldLevel < newLevel)
-                    {
-                        PartyMember newLeveledPlayer = partyManager.GetPartyMemberByID(currentAttacker.ID);
-                        currentAttacker.Level = newLeveledPlayer.Level;
-                        currentAttacker.Strength = newLeveledPlayer.Strength;
-                        currentAttacker.MaxHealth = newLeveledPlayer.MaxHealth;
-                        currentAttacker.CurrentHealth = newLeveledPlayer.CurrentHealth;
-                        currentAttacker.UpdateUI();
-                        bottomText.text = string.Format("{0} is now level {1}!", currentAttacker.Name, newLevel);
-                        DetermineBattleOrder();
-                        // wait some seconds
-                        yield return new WaitForSeconds(TURN_DURATION / 2);
-                    }
-                }
+                yield return StartCoroutine(GiveExpToPlayerParty(currentTarget));
 
                 enemyBattlers.Remove(currentTarget);
 
@@ -222,6 +202,39 @@ public class BattleSystem : MonoBehaviour
             {
                 bottomText.text = RUN_FAIL_MESSAGE;
                 yield return new WaitForSeconds(TURN_DURATION);
+            }
+        }
+    }
+
+    // Exp distribution
+    public IEnumerator GiveExpToPlayerParty(BattleEntities defeatedEnemy)
+    {
+        for (int i = 0; i < playerBattlers.Count; i++)
+        {
+            BattleEntities partyMember = playerBattlers[i];
+
+            if (partyMember.IsPlayer)
+            {
+                int oldLevel = partyManager.GetLevelByID(partyMember.ID);
+                partyManager.AddExpByID(partyMember.ID, defeatedEnemy.ExpGive);
+                int newLevel = partyManager.GetLevelByID(partyMember.ID);
+                bottomText.text = string.Format("{0} gained {1} experience!", partyMember.Name, defeatedEnemy.ExpGive);
+                // wait some seconds
+                yield return new WaitForSeconds(TURN_DURATION / 2);
+
+                if (oldLevel < newLevel)
+                {
+                    PartyMember newLeveledPlayer = partyManager.GetPartyMemberByID(partyMember.ID);
+                    partyMember.Level = newLeveledPlayer.Level;
+                    partyMember.Strength = newLeveledPlayer.Strength;
+                    partyMember.MaxHealth = newLeveledPlayer.MaxHealth;
+                    partyMember.CurrentHealth = newLeveledPlayer.CurrentHealth;
+                    partyMember.UpdateUI();
+                    bottomText.text = string.Format("{0} is now level {1}!", partyMember.Name, newLevel);
+                    DetermineBattleOrder();
+                    // wait some seconds
+                    yield return new WaitForSeconds(TURN_DURATION / 2);
+                }
             }
         }
     }
@@ -331,7 +344,7 @@ public class BattleSystem : MonoBehaviour
     {
         for (int i = 0; i < attackSelectionButtons.Length; i++)
         {
-            if (i >= attackSelectionButtons.Length)
+            if (i >= playerBattlers[currentPlayer].Attacks.Length)
             {
                 attackSelectionButtons[i].SetActive(false);
             }

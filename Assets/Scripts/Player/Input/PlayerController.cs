@@ -246,6 +246,19 @@ public class PlayerController : MonoBehaviour
     public void JumpTrigger()
     {
         AddForceY(jumpPower);
+
+        anim.SetBool(IS_JUMPING_PARAM, false);
+        Debug.Log("sd");
+        if (!isGrounded)
+        {
+            currentState = IS_IN_AIR_PARAM;
+            anim.SetBool(IS_IN_AIR_PARAM, true);
+        }
+        else
+        {
+            currentState = IS_IDLE_PARAM;
+            CheckGroundStates();
+        }
     }
     #endregion
     // For debugging
