@@ -18,4 +18,4 @@ MonoBehaviour:
   BaseStr: 5
   BaseSpeed: 5
   MemberBattleVisualPrefab: {fileID: 7514317235867061558, guid: 77c18093dc7bd464582bedf40c70840e, type: 3}
-  MemberOverworldVisualPrefab: {fileID: 0}
+  MemberOverworldVisualPrefab: {fileID: 9118030719819356465, guid: 3b2e83109fe41e74393262b15bae8500, type: 3}
