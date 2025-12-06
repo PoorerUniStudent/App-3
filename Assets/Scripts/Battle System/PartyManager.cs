@@ -136,6 +136,19 @@ public class PartyManager : MonoBehaviour
         return 0;
     }
 
+    public PartyMember GetPartyMemberByID(int id)
+    {
+        for (int i = 0; i < currentParty.Count; i++)
+        {
+            if (currentParty[i].ID == id)
+            {
+                return currentParty[i];
+            }
+        }
+
+        return null;
+    }
+
     public void ResetPartyMembers()
     {
         for (int i = 0; i < currentParty.Count; i++)

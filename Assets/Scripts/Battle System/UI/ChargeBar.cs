@@ -8,11 +8,9 @@ public class ChargeBar : MonoBehaviour
     [SerializeField] private Image aimBar;
     [SerializeField] private Image targetBar;
 
-    private const int DEFAULT_AIM_BAR_POS = -115;
-    private const float LERP_DURATION = 1.5f;
-
     private bool isActive;
     private float lerpTime;
+    private float maxTargetPos;
 
     private int currentPartyMember; // index of party member using this
 
@@ -22,6 +20,9 @@ public class ChargeBar : MonoBehaviour
     private PlayerControls playerControls;
     private BattleSystem battleSystem;
 
+    private const int DEFAULT_AIM_BAR_POS = -115;
+    private const float LERP_DURATION = 1.5f;
+
     public float damageMod { get; private set; }
 
 
@@ -29,6 +30,7 @@ public class ChargeBar : MonoBehaviour
     {
         startPos = new Vector3(DEFAULT_AIM_BAR_POS, 0, 0);
         endPos = new Vector3(-DEFAULT_AIM_BAR_POS, 0, 0);
+        maxTargetPos = Mathf.Abs(DEFAULT_AIM_BAR_POS) - targetBar.rectTransform.rect.width/2;
     }
 
     private void Start()
@@ -44,6 +46,8 @@ public class ChargeBar : MonoBehaviour
         }
 
         aimBar.rectTransform.anchoredPosition = new Vector2(DEFAULT_AIM_BAR_POS, 0);
+        float randomTargetPos = Random.Range(-maxTargetPos, maxTargetPos);
+        targetBar.rectTransform.anchoredPosition = new Vector2(randomTargetPos, 0);
         playerControls.Enable();
         isActive = true;
     }
@@ -85,7 +89,7 @@ public class ChargeBar : MonoBehaviour
                 posDiff = Mathf.Abs(posDiff);
 
                 Debug.Log(posDiff / threshold);
-                if (posDiff <= targetBar.rectTransform.rect.width)
+                if (posDiff / threshold <= 0.25f)
                 {
                     damageMod = 1f;
                 }

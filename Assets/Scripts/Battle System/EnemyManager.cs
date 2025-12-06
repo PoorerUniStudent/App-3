@@ -63,6 +63,7 @@ public class EnemyManager : MonoBehaviour
         {
             Encounter tempEncounter = encounters[Random.Range(0, encounters.Length)];
             int level = Random.Range(tempEncounter.LevelMin, tempEncounter.LevelMax + 1);
+            Debug.Log(tempEncounter.Enemy.EnemyName);
             GenerateEnemyByName(tempEncounter.Enemy.EnemyName, level);
         }
     }

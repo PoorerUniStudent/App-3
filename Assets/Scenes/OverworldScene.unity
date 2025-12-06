@@ -520,8 +520,9 @@ GameObject:
   m_Component:
   - component: {fileID: 814016444}
   - component: {fileID: 814016445}
+  - component: {fileID: 814016446}
   m_Layer: 7
-  m_Name: GrassTrigger (1)
+  m_Name: WaspGrassTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -563,6 +564,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 8.780261, y: 1, z: 15.500029}
   m_Center: {x: -9.411023, y: 0, z: 4.4678516}
+--- !u!114 &814016446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814016443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b09319956924546aec5a81fb002454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemiesInGrass:
+  - Enemy: {fileID: 11400000, guid: 665c123824f60164f9e5ec5bbdf6e6f4, type: 2}
+    LevelMin: 5
+    LevelMax: 10
 --- !u!1 &821882614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,6 +1085,9 @@ MonoBehaviour:
   - Enemy: {fileID: 11400000, guid: 8ccbc696cc36c7b42b39b54c8b739081, type: 2}
     LevelMin: 1
     LevelMax: 4
+  - Enemy: {fileID: 11400000, guid: 665c123824f60164f9e5ec5bbdf6e6f4, type: 2}
+    LevelMin: 5
+    LevelMax: 10
   maxNumEnemies: 2
 --- !u!4 &1305209800
 Transform:
@@ -1115,6 +1135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies:
   - {fileID: 11400000, guid: 8ccbc696cc36c7b42b39b54c8b739081, type: 2}
+  - {fileID: 11400000, guid: 665c123824f60164f9e5ec5bbdf6e6f4, type: 2}
   currentEnemies: []
 --- !u!4 &1309166440
 Transform:
@@ -1344,8 +1365,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1530784528}
   - component: {fileID: 1530784529}
+  - component: {fileID: 1530784530}
   m_Layer: 7
-  m_Name: GrassTrigger
+  m_Name: SlimeGrassTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1387,6 +1409,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 18.681194, y: 1, z: 27.05769}
   m_Center: {x: -7.6085925, y: 0, z: 3.6475353}
+--- !u!114 &1530784530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530784527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b09319956924546aec5a81fb002454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemiesInGrass:
+  - Enemy: {fileID: 11400000, guid: 8ccbc696cc36c7b42b39b54c8b739081, type: 2}
+    LevelMin: 1
+    LevelMax: 4
 --- !u!1 &1599934537
 GameObject:
   m_ObjectHideFlags: 0

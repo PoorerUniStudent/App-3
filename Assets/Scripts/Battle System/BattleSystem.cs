@@ -103,7 +103,7 @@ public class BattleSystem : MonoBehaviour
         {
             chargeBar.gameObject.SetActive(true);
             chargeBar.SetCurrentlyAttackingMember(i);
-            if (allBattlers[i].CurrentAttack.AnimName != "")
+            if (allBattlers[i].CurrentAttack.AttackName == "Slash")
             {
                 allBattlers[i].BattleVisuals.PlayAttackAnimation();
             }
@@ -145,7 +145,11 @@ public class BattleSystem : MonoBehaviour
 
                     if (oldLevel < newLevel)
                     {
-                        currentAttacker.Level = newLevel;
+                        PartyMember newLeveledPlayer = partyManager.GetPartyMemberByID(currentAttacker.ID);
+                        currentAttacker.Level = newLeveledPlayer.Level;
+                        currentAttacker.Strength = newLeveledPlayer.Strength;
+                        currentAttacker.MaxHealth = newLeveledPlayer.MaxHealth;
+                        currentAttacker.CurrentHealth = newLeveledPlayer.CurrentHealth;
                         currentAttacker.UpdateUI();
                         bottomText.text = string.Format("{0} is now level {1}!", currentAttacker.Name, newLevel);
                         DetermineBattleOrder();
