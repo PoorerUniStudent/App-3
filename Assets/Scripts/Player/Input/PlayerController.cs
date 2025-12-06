@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
 
         if (partyManager.GetPosition() != Vector3.zero)
         {
+            Debug.Log(partyManager.GetPosition());
             transform.position = partyManager.GetPosition();
         }
     }

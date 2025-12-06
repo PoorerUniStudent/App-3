@@ -43,7 +43,7 @@ public class BattleSystem : MonoBehaviour
     private const int RUN_CHANCE = 60;
     private const string OVERWORLD_SCENE = "OverworldScene";
 
-    private Vector3 RESPAWN_POS = new Vector3(0, 1, 9);
+    private Vector3 RESPAWN_POS = new Vector3(-43.17f, 4f, 13.61f);
 
     void Start()
     {
