@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxStepsToEncounter;
     [SerializeField] private Transform groundCheck;
 
+    AudioManager audioManager;
+
     public PlayerControls playerControls { get; private set; }
     private Rigidbody rb;
     private Vector3 movement;
@@ -50,6 +52,8 @@ public class PlayerController : MonoBehaviour
     #region Unity Functions
     private void Awake()
     {
+
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         playerControls = new PlayerControls();
         CalculateStepsToEncounter();
     }
@@ -86,6 +90,7 @@ public class PlayerController : MonoBehaviour
         if (jump && numOfJumps > 0 && (isGrounded || coyoteTime)) 
         {
             Debug.Log("Jumped");
+            audioManager.PlaySFX(audioManager.jumpSFX);
             numOfJumps -= 1;
             coyoteTime = false;
             currentState = IS_JUMPING_PARAM;
