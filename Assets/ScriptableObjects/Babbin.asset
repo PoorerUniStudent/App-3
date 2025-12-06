@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd7231d46ea3254da7e65b78158c985, type: 3}
   m_Name: Babbin
   m_EditorClassIdentifier: 
-  MemberName: Babbin
+  MemberName: Maya
   StartingLevel: 1
   BaseHealth: 13
   BaseStr: 6
