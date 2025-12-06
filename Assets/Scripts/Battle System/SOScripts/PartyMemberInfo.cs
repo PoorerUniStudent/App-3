@@ -13,4 +13,14 @@ public class PartyMemberInfo : ScriptableObject
 
     public GameObject MemberBattleVisualPrefab; // What will be displayed in battle
     public GameObject MemberOverworldVisualPrefab; // What will be displayed in the overworld scene
+
+    public MemberAttack[] Attacks;
+}
+
+[System.Serializable]
+public class MemberAttack
+{
+    public string AttackName;
+    public string AnimName;
+    public float AttackMult;
 }

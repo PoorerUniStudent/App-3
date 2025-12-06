@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class EncounterSystem : MonoBehaviour
 {
-    [SerializeField] private Encounter[] enemiesInScene;
     [SerializeField] private int maxNumEnemies;
 
     private EnemyManager enemyManager;
     void Start()
     {
         enemyManager = FindFirstObjectByType<EnemyManager>();
-        enemyManager.GenerateEnemiesByEncounter(enemiesInScene, maxNumEnemies);
     }
 
-    
+    public void GenerateEncounter(Encounter[] enemiesInGrass)
+    {
+        enemyManager.GenerateEnemiesByEncounter(enemiesInGrass, maxNumEnemies);
+    }
 }
 
 [System.Serializable]

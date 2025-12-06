@@ -53,6 +53,12 @@ public class BattleVisuals : MonoBehaviour
         UpdateHealthBar();
     }
 
+    public void ChangeLevel(int level)
+    {
+        this.level = level;
+        levelText.text = LVL_ABBR + this.level.ToString();
+    }
+
     public void UpdateHealthBar()
     {
         healthBar.maxValue = maxHealth;

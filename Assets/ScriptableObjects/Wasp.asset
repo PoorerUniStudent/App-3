@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d95a8ecacc084ce498fc98ef4172415b, type: 3}
-  m_Name: Blue Slime
+  m_Name: Wasp
   m_EditorClassIdentifier: 
-  EnemyName: Blue Slime
-  BaseHealth: 3
-  BaseStr: 1
-  BaseSpeed: 2
-  EnemyVisualPrefab: {fileID: 6299902574469832385, guid: c8cc96091181ba24e8bbffa39f81abd7, type: 3}
+  EnemyName: Wasp
+  BaseHealth: 5
+  BaseStr: 3
+  BaseSpeed: 5
+  BaseExpGive: 14
+  EnemyVisualPrefab: {fileID: 8720402864369884150, guid: c7bb580d5f1b78d4cb1ac84d11a19910, type: 3}

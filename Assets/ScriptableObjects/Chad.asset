@@ -16,6 +16,13 @@ MonoBehaviour:
   StartingLevel: 1
   BaseHealth: 16
   BaseStr: 5
-  BaseSpeed: 5
+  BaseSpeed: 7
   MemberBattleVisualPrefab: {fileID: 7514317235867061558, guid: 77c18093dc7bd464582bedf40c70840e, type: 3}
-  MemberOverworldVisualPrefab: {fileID: 9118030719819356465, guid: 3b2e83109fe41e74393262b15bae8500, type: 3}
+  MemberOverworldVisualPrefab: {fileID: 0}
+  Attacks:
+  - AttackName: Slash
+    AnimName: isAttacking
+    AttackMult: 1
+  - AttackName: Shoot
+    AnimName: isShoot
+    AttackMult: 1.25

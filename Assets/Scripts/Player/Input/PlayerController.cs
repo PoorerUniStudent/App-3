@@ -16,10 +16,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxStepsToEncounter;
     [SerializeField] private Transform groundCheck;
 
-    private PlayerControls playerControls;
+    public PlayerControls playerControls { get; private set; }
     private Rigidbody rb;
     private Vector3 movement;
     private PartyManager partyManager;
+    private EncounterSystem encounterSystem;
 
     private bool movingInGrass;
     private float stepTimer;
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         partyManager = FindFirstObjectByType<PartyManager>();
+        encounterSystem = FindFirstObjectByType<EncounterSystem>();
 
         if (partyManager.GetPosition() != Vector3.zero)
         {
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
         CheckCoyoteTime();
 
         movement = new Vector3(x, 0, z).normalized;
-        Debug.Log(jump);
+  
         if (jump && numOfJumps > 0 && (isGrounded || coyoteTime)) 
         {
             Debug.Log("Jumped");
@@ -153,6 +155,18 @@ public class PlayerController : MonoBehaviour
 
                 if (stepsInGrass >= maxStepsToEncounter)
                 {
+                    foreach (Collider collider in colliders)
+                    {
+                        Grass grass = collider.GetComponent<Grass>();
+
+                        if (grass == null)
+                        {
+                            return;
+                        }
+
+                        encounterSystem.GenerateEncounter(grass.GetEnemiesInGrass());
+                    }
+
                     partyManager.SetPosition(transform.position);
                     SceneManager.LoadScene(BATTLE_SCENE);
                 }

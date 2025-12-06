@@ -42,6 +42,7 @@ public class EnemyManager : MonoBehaviour
                 newEnemy.Strength = Mathf.RoundToInt(enemies[i].BaseStr + (enemies[i].BaseStr * levelModifier));
                 newEnemy.Speed = Mathf.RoundToInt(enemies[i].BaseSpeed + (enemies[i].BaseSpeed * levelModifier));
                 newEnemy.EnemyVisualPrefab = enemies[i].EnemyVisualPrefab;
+                newEnemy.ExpGive = enemies[i].BaseExpGive + (enemies[i].BaseExpGive/5 * (newEnemy.Level-1));
 
                 currentEnemies.Add(newEnemy);
             }
@@ -62,6 +63,7 @@ public class EnemyManager : MonoBehaviour
         {
             Encounter tempEncounter = encounters[Random.Range(0, encounters.Length)];
             int level = Random.Range(tempEncounter.LevelMin, tempEncounter.LevelMax + 1);
+            Debug.Log(tempEncounter.Enemy.EnemyName);
             GenerateEnemyByName(tempEncounter.Enemy.EnemyName, level);
         }
     }
@@ -77,6 +79,7 @@ public class Enemy
     public int MaxHealth;
     public int Strength;
     public int Speed;
+    public int ExpGive;
 
     public GameObject EnemyVisualPrefab;
 }
