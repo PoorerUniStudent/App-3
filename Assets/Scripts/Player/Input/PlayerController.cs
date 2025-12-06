@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
         if (jump && numOfJumps > 0 && (isGrounded || coyoteTime)) 
         {
             Debug.Log("Jumped");
-            audioManager.PlaySFX(audioManager.jumpSFX);
+            
             numOfJumps -= 1;
             coyoteTime = false;
             currentState = IS_JUMPING_PARAM;
@@ -238,6 +238,8 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+
+        audioManager.PlaySFX(audioManager.jumpSFX);
     }
 
     public void LandingFinishedTrigger()

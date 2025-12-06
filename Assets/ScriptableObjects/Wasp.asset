@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyName: Wasp
   BaseHealth: 5
-  BaseStr: 3
+  BaseStr: 2
   BaseSpeed: 5
   BaseExpGive: 14
   EnemyVisualPrefab: {fileID: 8720402864369884150, guid: c7bb580d5f1b78d4cb1ac84d11a19910, type: 3}
