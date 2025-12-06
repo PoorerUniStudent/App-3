@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -246,7 +246,7 @@ public class BattleSystem : MonoBehaviour
     {
         // get current party
         List<PartyMember> currentParty = new List<PartyMember>();
-        currentParty = partyManager.GetCurrentParty();
+        currentParty = partyManager.GetAliveParty();
 
         // create battle entities for our party members
         for (int i = 0; i < currentParty.Count; i++)
@@ -405,7 +405,7 @@ public class BattleSystem : MonoBehaviour
 
         for (int i = 0; i < allBattlers.Count; i++)
         {
-            if (allBattlers[i].IsPlayer)
+            if (allBattlers[i].IsPlayer == true && allBattlers[i].CurrentHealth > 0)
             {
                 partyMembers.Add(i);
             }
@@ -420,7 +420,7 @@ public class BattleSystem : MonoBehaviour
 
         for (int i = 0; i < allBattlers.Count; i++)
         {
-            if (!allBattlers[i].IsPlayer)
+            if (!allBattlers[i].IsPlayer && allBattlers[i].CurrentHealth > 0)
             {
                 enemies.Add(i);
             }
