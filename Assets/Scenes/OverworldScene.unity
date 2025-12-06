@@ -4183,7 +4183,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 952614967382397699, guid: c8ad3c9da01fde44f880a90c3f8cc528, type: 3}
       propertyPath: m_Name
-      value: Claire
+      value: Babbin
       objectReference: {fileID: 0}
     - target: {fileID: 1871172138255474242, guid: c8ad3c9da01fde44f880a90c3f8cc528, type: 3}
       propertyPath: m_LocalPosition.x
